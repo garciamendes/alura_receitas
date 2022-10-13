@@ -1,7 +1,6 @@
-# Django
 from django.apps import AppConfig
 
 
-class PessoasConfig(AppConfig):
+class UsersConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'pessoas'
+    name = 'users'

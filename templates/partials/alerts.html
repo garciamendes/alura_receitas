@@ -1,0 +1,10 @@
+{% if messages %}
+  {% for message in messages %}
+    <div class="d-flex alert alert-{{ message.tags }}" role="alert">
+      <strong class='col-12'>{{ message }}</strong>
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+  {% endfor %}
+{% endif %}
