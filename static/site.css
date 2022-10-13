@@ -1377,3 +1377,7 @@ textarea:focus {
   display: flex !important;
   align-items: center !important;
 }
+
+.color-red {
+  color: #ff0000 !important;
+}

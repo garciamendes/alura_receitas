@@ -1,9 +1,9 @@
-# Django
-from django.db import models
+# Python
 from datetime import datetime
 
-# Local
-from pessoas.models import Pessoas
+# Django
+from django.db import models
+from django.contrib.auth.models import User
 
 class Receita(models.Model):
     foto_receita = models.ImageField(upload_to='fotos/%d/%m/%Y/', blank=True)
@@ -13,6 +13,7 @@ class Receita(models.Model):
     tempo_preparo = models.IntegerField()
     redimento = models.CharField(max_length=100)
     categoria = models.CharField(max_length=100)
-    pessoa = models.ForeignKey(Pessoas, on_delete=models.CASCADE)
+    pessoa = models.ForeignKey(User, on_delete=models.CASCADE)
     publicada = models.BooleanField(default=False)
+    publica = models.BooleanField(default=False)
     data_receita = models.DateField(default=datetime.now, blank=True)
