@@ -96,6 +96,46 @@ def cria_receita(request):
     else:
         return render(request, 'usuarios/cria_receita.html')
 
+def edita_receita(request, receita_id):
+    receita = get_object_or_404(Receita, pk=receita_id)
+    receita_a_editar = { 'receita': receita }
+    return render(request, 'usuarios/editar_receita.html', receita_a_editar)
+
+def update_receita(request):
+    if request.method == 'POST':
+        receita_id = request.POST.get('receita_id')
+        r = Receita.objects.get(pk=receita_id)
+
+        nome_receita = request.POST.get('nome_receita')
+        ingredientes = request.POST.get('ingredientes')
+        modo_preparo = request.POST.get('modo_preparo')
+        tempo_preparo = request.POST.get('tempo_preparo')
+        rendimento = request.POST.get('rendimento')
+        categoria = request.POST.get('categoria')
+        foto_receita = request.FILES.get('foto_receita')
+
+        r.nome_receita = nome_receita
+        r.ingredientes = ingredientes
+        r.modo_preparo = modo_preparo
+        r.tempo_preparo = tempo_preparo
+        r.redimento = rendimento
+        r.categoria = categoria
+
+        if foto_receita:
+            r.foto_receita = foto_receita
+
+        r.save()
+        messages.success(request, 'Receita Editada com sucesso')
+        return redirect('dashboard')
+    else:
+        return render(request, 'usuarios/editar_receita.html')
+
+def deleta_receita(request, receita_id):
+    receita = get_object_or_404(Receita, pk=receita_id)
+    receita.delete()
+    messages.success(request, 'Receita deletada com sucesso')
+    return redirect('dashboard')
+
 def dashboard(request):
     if request.user.is_authenticated:
         user_id = request.user.pk
