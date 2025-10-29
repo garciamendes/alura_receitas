@@ -1,0 +1,26 @@
+{% extends 'base_page.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'rpg.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="rpg-section">
+  <div class="container">
+    <article class="rpg-card">
+      <h1>Relatório de missão</h1>
+      <p class="rpg-muted">{{ attempt.created_at|date:'d/m/Y H:i' }}</p>
+      <p><strong>Personagem:</strong> {{ attempt.character.name }}</p>
+      <p><strong>Missão:</strong> {{ attempt.mission.name }}</p>
+      <p><strong>Resultado:</strong> {% if attempt.success %}Sucesso{% else %}Falha{% endif %}</p>
+      <p>{{ attempt.summary }}</p>
+      <p>Recompensas: {{ attempt.experience_earned }} XP • {{ attempt.gold_earned }} moedas</p>
+      <div class="rpg-actions">
+        <a class="rpg-btn" href="{% url 'rpg:mission_list' %}">Explorar mais missões</a>
+        <a class="rpg-btn" href="{% url 'rpg:character_detail' attempt.character.pk %}">Ver ficha</a>
+      </div>
+    </article>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,110 @@
+{% extends 'base_page.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'rpg.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="rpg-hero">
+  <div class="container">
+    <h1>Crie sua aventura</h1>
+    <p>
+      Monte fichas de heróis, desafie amigos em batalhas JxJ e participe de missões
+      narrativas diretamente do navegador.
+    </p>
+    <div class="rpg-actions">
+      <a class="rpg-btn" href="{% url 'rpg:character_create' %}">Criar ficha</a>
+      <a class="rpg-btn" href="{% url 'rpg:start_duel' %}">Iniciar duelo</a>
+      <a class="rpg-btn" href="{% url 'rpg:mission_list' %}">Explorar missões</a>
+    </div>
+  </div>
+</section>
+
+<section class="rpg-section">
+  <div class="container">
+    <h2>Heróis prontos para agir</h2>
+    {% if latest_characters %}
+      <div class="rpg-grid">
+        {% for character in latest_characters %}
+          <article class="rpg-card">
+            <h3>{{ character.name }}</h3>
+            <p class="rpg-muted">{{ character.archetype }} • Nível {{ character.level }}</p>
+            <p>{{ character.concept }}</p>
+            <a class="rpg-link" href="{% url 'rpg:character_detail' character.pk %}">Ver ficha</a>
+          </article>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="rpg-muted">Nenhum personagem cadastrado ainda. Que tal criar o primeiro?</p>
+    {% endif %}
+  </div>
+</section>
+
+<section class="rpg-section alt">
+  <div class="container">
+    <h2>Últimas batalhas</h2>
+    {% if recent_battles %}
+      <ul class="rpg-list">
+        {% for battle in recent_battles %}
+          <li>
+            <strong>{{ battle.challenger.name }}</strong>
+            vs
+            {% if battle.is_training %}
+              autômato <strong>{{ battle.bot.name }}</strong>
+            {% else %}
+              <strong>{{ battle.opponent.name }}</strong>
+            {% endif %}
+            —
+            {% if battle.winner %}
+              vitória de {{ battle.winner.name }}
+            {% else %}
+              empate épico
+            {% endif %}
+            <a class="rpg-inline-link" href="{% url 'rpg:battle_log' battle.pk %}">ver relato</a>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="rpg-muted">As arenas estão calmas. Organize um duelo para inaugurar as lutas!</p>
+    {% endif %}
+  </div>
+</section>
+
+<section class="rpg-section">
+  <div class="container">
+    <div class="rpg-split">
+      <div>
+        <h2>Quadro de missões</h2>
+        <p class="rpg-muted">Histórias rápidas para evoluir e ganhar recompensas.</p>
+        <ul class="rpg-list">
+          {% for mission in missions %}
+            <li>
+              <strong>{{ mission.name }}</strong>
+              — dificuldade {{ mission.get_difficulty_display }}
+              <a class="rpg-inline-link" href="{% url 'rpg:attempt_mission' mission.pk %}">participar</a>
+            </li>
+          {% empty %}
+            <li class="rpg-muted">Ainda não há missões disponíveis.</li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div>
+        <h2>Autômatos de treino</h2>
+        <p class="rpg-muted">Enfrente oponentes controlados pela IA para testar estratégias.</p>
+        <ul class="rpg-list">
+          {% for bot in bots %}
+            <li>
+              <strong>{{ bot.name }}</strong>
+              — poder {{ bot.power_rating }}
+              <a class="rpg-inline-link" href="{% url 'rpg:training_ground' %}">treinar</a>
+            </li>
+          {% empty %}
+            <li class="rpg-muted">Cadastre autômatos de treino pelo painel administrativo.</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

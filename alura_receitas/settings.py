@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'receitas',
     'pessoas',
     'users',
+    'rpg',
 ]
 
 MIDDLEWARE = [

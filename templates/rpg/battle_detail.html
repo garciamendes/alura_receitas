@@ -1,0 +1,38 @@
+{% extends 'base_page.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'rpg.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="rpg-section">
+  <div class="container">
+    <h1>Relato da batalha</h1>
+    <article class="rpg-card">
+      <p class="rpg-muted">Registrado em {{ battle.created_at|date:'d/m/Y H:i' }}</p>
+      <p>
+        <strong>{{ battle.challenger.name }}</strong>
+        enfrentou
+        {% if battle.is_training %}
+          o autômato <strong>{{ battle.bot.name }}</strong>
+        {% else %}
+          <strong>{{ battle.opponent.name }}</strong>
+        {% endif %}.
+      </p>
+      <p>{{ battle.log }}</p>
+      <p>
+        {% if battle.winner %}
+          <strong>Vitória:</strong> {{ battle.winner.name }}
+        {% else %}
+          <strong>Resultado:</strong> Empate
+        {% endif %}
+      </p>
+      <div class="rpg-actions">
+        <a class="rpg-btn" href="{% url 'rpg:start_duel' %}">Novo duelo</a>
+        <a class="rpg-btn" href="{% url 'rpg:home' %}">Voltar ao salão</a>
+      </div>
+    </article>
+  </div>
+</section>
+{% endblock %}

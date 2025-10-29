@@ -1,0 +1,32 @@
+{% extends 'base_page.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'rpg.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="rpg-section">
+  <div class="container">
+    <h1>Organizar duelo</h1>
+    <p class="rpg-muted">Selecione dois personagens para resolver uma batalha automática.</p>
+    <form method="post" class="rpg-form">
+      {% csrf_token %}
+      {{ form.non_field_errors }}
+      <div class="rpg-form-grid">
+        {% for field in form %}
+          <div class="rpg-field">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% if field.help_text %}<small class="rpg-muted">{{ field.help_text }}</small>{% endif %}
+            {% for error in field.errors %}
+              <div class="rpg-error">{{ error }}</div>
+            {% endfor %}
+          </div>
+        {% endfor %}
+      </div>
+      <button class="rpg-btn" type="submit">Iniciar duelo</button>
+    </form>
+  </div>
+</section>
+{% endblock %}

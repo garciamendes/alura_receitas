@@ -1,0 +1,89 @@
+{% extends 'base_page.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'rpg.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="rpg-section">
+  <div class="container">
+    <header class="rpg-header">
+      <div>
+        <h1>{{ character.name }}</h1>
+        <p class="rpg-muted">{{ character.archetype }} • Nível {{ character.level }}</p>
+      </div>
+      <a class="rpg-btn" href="{% url 'rpg:start_duel' %}">Desafiar em duelo</a>
+    </header>
+
+    <div class="rpg-split">
+      <article class="rpg-card">
+        <h2>Ficha técnica</h2>
+        <ul class="rpg-attributes">
+          <li><strong>Conceito:</strong> {{ character.concept }}</li>
+          <li><strong>Origem:</strong> {{ character.origin|default:'—' }}</li>
+          <li><strong>Força:</strong> {{ character.strength }}</li>
+          <li><strong>Agilidade:</strong> {{ character.agility }}</li>
+          <li><strong>Intelecto:</strong> {{ character.intellect }}</li>
+          <li><strong>Espírito:</strong> {{ character.spirit }}</li>
+          <li><strong>Vitalidade:</strong> {{ character.vitality }}</li>
+          <li><strong>Pontos de Vida:</strong> {{ character.hit_points }}</li>
+          <li><strong>Mana:</strong> {{ character.mana }}</li>
+        </ul>
+        <p><strong>Biografia:</strong> {{ character.biography|default:'Sem registros por enquanto.' }}</p>
+      </article>
+      <article class="rpg-card">
+        <h2>Progresso</h2>
+        <p><strong>Experiência:</strong> {{ character.experience }} XP</p>
+        <p><strong>Ouro:</strong> {{ character.gold }} moedas</p>
+        <p><strong>Poder de combate:</strong> {{ character.combat_power }}</p>
+        <p class="rpg-muted">Criado em {{ character.created_at|date:'d/m/Y H:i' }}</p>
+      </article>
+    </div>
+
+    <div class="rpg-split">
+      <section>
+        <h2>Histórico de batalhas</h2>
+        {% if battle_history %}
+          <ul class="rpg-list">
+            {% for battle in battle_history %}
+              <li>
+                {% if battle.is_training %}
+                  Treino contra {{ battle.bot.name }}
+                {% else %}
+                  Duelo com {% if battle.challenger == character %}{{ battle.opponent.name }}{% else %}{{ battle.challenger.name }}{% endif %}
+                {% endif %}
+                —
+                {% if battle.winner %}
+                  Vitória de {{ battle.winner.name }}
+                {% else %}
+                  Empate
+                {% endif %}
+                <a class="rpg-inline-link" href="{% url 'rpg:battle_log' battle.pk %}">ver detalhes</a>
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p class="rpg-muted">Nenhuma batalha registrada ainda.</p>
+        {% endif %}
+      </section>
+      <section>
+        <h2>Missões recentes</h2>
+        {% if mission_attempts %}
+          <ul class="rpg-list">
+            {% for attempt in mission_attempts %}
+              <li>
+                {{ attempt.mission.name }} — {% if attempt.success %}Sucesso{% else %}Falha{% endif %}
+                <span class="rpg-muted">(+{{ attempt.experience_earned }} XP)</span>
+                <a class="rpg-inline-link" href="{% url 'rpg:mission_result' attempt.pk %}">ver relato</a>
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p class="rpg-muted">Em busca de aventuras. Conclua uma missão para iniciar o histórico.</p>
+        {% endif %}
+      </section>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends 'base_page.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'rpg.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="rpg-section">
+  <div class="container">
+    <h1>Missões disponíveis</h1>
+    <p class="rpg-muted">Escolha uma missão para seus personagens participarem.</p>
+    {% if missions %}
+      <div class="rpg-grid">
+        {% for mission in missions %}
+          <article class="rpg-card">
+            <h2>{{ mission.name }}</h2>
+            <p class="rpg-muted">Dificuldade {{ mission.get_difficulty_display }}</p>
+            <p>{{ mission.description }}</p>
+            <p class="rpg-muted">Nível mínimo: {{ mission.minimum_level }}</p>
+            <p>Recompensas: {{ mission.experience_reward }} XP • {{ mission.gold_reward }} moedas</p>
+            <a class="rpg-btn" href="{% url 'rpg:attempt_mission' mission.pk %}">Tentar missão</a>
+          </article>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="rpg-muted">Nenhuma missão cadastrada. Cadastre novas missões pelo painel administrativo.</p>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}
