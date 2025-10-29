@@ -16,6 +16,7 @@
 
     <!-- Stylesheet -->
     <link rel="stylesheet" href="{% static 'site.css' %}">
+    {% block extra_css %}{% endblock %}
 
   </head>
 
@@ -54,5 +55,6 @@
     <script src="{% static 'js/plugins/plugins.js' %}"></script>
     <!-- Active js -->
     <script src="{% static 'js/active.js' %}"></script>
+    {% block extra_js %}{% endblock %}
   </body>
 </html>

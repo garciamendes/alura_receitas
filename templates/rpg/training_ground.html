@@ -1,0 +1,47 @@
+{% extends 'base_page.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'rpg.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="rpg-section">
+  <div class="container">
+    <h1>Arena de treinamento</h1>
+    <p class="rpg-muted">Selecione um autômato para testar suas habilidades antes de desafiar outros jogadores.</p>
+    <form method="post" class="rpg-form">
+      {% csrf_token %}
+      {{ form.non_field_errors }}
+      <div class="rpg-form-grid">
+        {% for field in form %}
+          <div class="rpg-field">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% if field.help_text %}<small class="rpg-muted">{{ field.help_text }}</small>{% endif %}
+            {% for error in field.errors %}
+              <div class="rpg-error">{{ error }}</div>
+            {% endfor %}
+          </div>
+        {% endfor %}
+      </div>
+      <button class="rpg-btn" type="submit">Iniciar treino</button>
+    </form>
+
+    <h2>Autômatos disponíveis</h2>
+    {% if trainings %}
+      <ul class="rpg-list">
+        {% for bot in trainings %}
+          <li>
+            <strong>{{ bot.name }}</strong>
+            — poder {{ bot.power_rating }}
+            <span class="rpg-muted">Recompensa: {{ bot.experience_reward }} XP • {{ bot.gold_reward }} moedas</span>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="rpg-muted">Nenhum autômato cadastrado no momento.</p>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

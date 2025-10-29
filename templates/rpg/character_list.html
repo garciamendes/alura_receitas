@@ -1,0 +1,41 @@
+{% extends 'base_page.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'rpg.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="rpg-section">
+  <div class="container">
+    <header class="rpg-header">
+      <div>
+        <h1>Personagens cadastrados</h1>
+        <p class="rpg-muted">Explore as fichas disponíveis para montar grupos e partidas.</p>
+      </div>
+      <a class="rpg-btn" href="{% url 'rpg:character_create' %}">Criar nova ficha</a>
+    </header>
+
+    {% if characters %}
+      <div class="rpg-grid">
+        {% for character in characters %}
+          <article class="rpg-card">
+            <h2>{{ character.name }}</h2>
+            <p class="rpg-muted">{{ character.archetype }} • Nível {{ character.level }}</p>
+            <ul class="rpg-attributes">
+              <li><strong>Força:</strong> {{ character.strength }}</li>
+              <li><strong>Agilidade:</strong> {{ character.agility }}</li>
+              <li><strong>Intelecto:</strong> {{ character.intellect }}</li>
+              <li><strong>Espírito:</strong> {{ character.spirit }}</li>
+              <li><strong>Vitalidade:</strong> {{ character.vitality }}</li>
+            </ul>
+            <a class="rpg-link" href="{% url 'rpg:character_detail' character.pk %}">Detalhes</a>
+          </article>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="rpg-muted">Sem fichas cadastradas por enquanto. Clique em "Criar nova ficha" para começar.</p>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}
